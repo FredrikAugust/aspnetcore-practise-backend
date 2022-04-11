@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forest", "Forest\Forest.csproj", "{5A0908C9-A017-445A-AF0E-188D90E17FC1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5A0908C9-A017-445A-AF0E-188D90E17FC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A0908C9-A017-445A-AF0E-188D90E17FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A0908C9-A017-445A-AF0E-188D90E17FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A0908C9-A017-445A-AF0E-188D90E17FC1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
