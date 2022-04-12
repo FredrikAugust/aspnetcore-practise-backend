@@ -45,6 +45,8 @@ builder.Services.AddSwaggerGen();
 // Db Contexts
 builder.Services.AddDbContext<ChallengesContext>();
 
+builder.Services.AddLogging();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -68,7 +70,6 @@ using (var scope = app.Services.CreateScope())
     var challengesContext = services.GetService<ChallengesContext>();
     challengesContext?.Database.EnsureCreated();
     ChallengeInitializer.Initialize(challengesContext);
-    ChallengeInitializer.InitializeAttachments(challengesContext);
 }
 
 

@@ -11,4 +11,6 @@ public class Challenge
     public int Points { get; set; }
 
     public List<ChallengeAttachment> Attachments { get; } = new();
+
+    public Answer Answer { get; set; } = null!;
 }

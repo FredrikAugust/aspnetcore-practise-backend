@@ -1,5 +1,8 @@
+using Forest.Data.BindingModels;
 using Forest.Data.Contexts;
 using Forest.Data.Models;
+using Forest.Data.ViewModels;
+using Forest.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +12,7 @@ namespace Forest.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize]
-public class ChallengesController : ControllerBase
+public class ChallengesController : ControllerBaseWithSubject
 {
     private readonly ILogger<ChallengesController> _logger;
 
@@ -22,34 +25,74 @@ public class ChallengesController : ControllerBase
     }
 
     [HttpGet(Name = "GetAll")]
-    public async Task<IEnumerable<Challenge>> Get()
+    public async Task<ActionResult> Get()
     {
-        return await _challengesContext.Challenges.ToListAsync();
+        if (Subject == null) return BadRequest("Subject not present in JWT token");
+        
+        var userSolves = await _challengesContext.Solves.Where(solve => solve.Subject == Subject).ToListAsync();
+        var challenges = await _challengesContext.Challenges.ToListAsync();
+        
+        return Ok(challenges.Select(challenge => new ChallengeViewModel
+        {
+            Challenge = challenge,
+            Solved = userSolves.Any(solve => solve.ChallengeId == challenge.ChallengeId)
+        }));
     }
 
-    [HttpGet("{id:int}", Name = "GetChallenge")]
-    public async Task<ActionResult<Challenge>> Get(int id)
+    [HttpGet("{challengeId:int}", Name = "GetChallenge")]
+    public async Task<ActionResult<Challenge>> Get(int challengeId)
     {
         var challenge = await _challengesContext.Challenges.Include(challenge1 => challenge1.Attachments)
-            .FirstOrDefaultAsync(challenge1 => challenge1.ChallengeId == id);
+            .AsNoTracking().FirstOrDefaultAsync(challenge1 => challenge1.ChallengeId == challengeId);
 
         if (challenge == null) return NotFound();
 
-        return Ok(challenge);
+        if (Subject == null) return BadRequest("Subject is not present on JWT token");
+
+        var solved =
+            await _challengesContext.Solves.FirstOrDefaultAsync(solve => solve.Subject == Subject && solve.ChallengeId == challengeId);
+
+        if (solved == null)
+        {
+            return Ok(new ChallengeViewModel
+            {
+                Solved = false,
+                Challenge = challenge
+            });
+        }
+
+        var answer = await _challengesContext.Answers.FirstOrDefaultAsync(answer => answer.ChallengeId == challengeId);
+
+        return Ok(new ChallengeViewModel
+        {
+            Solved = true,
+            Challenge = challenge,
+            Answer = answer
+        });
     }
 
     [HttpPost]
     [Authorize("CreateChallenge")]
-    public async Task<ActionResult<Challenge>> Create(Challenge challenge)
+    public async Task<ActionResult<Challenge>> Create([FromBody] CreateChallengeBindingModel challengeBindingModel)
     {
+        var challenge = new Challenge
+        {
+            Name = challengeBindingModel.Name,
+            Description = challengeBindingModel.Description,
+            Points = challengeBindingModel.Points,
+            Answer = new Answer
+            {
+                Value = challengeBindingModel.Answer
+            }
+        };
+
         _challengesContext.Challenges.Add(challenge);
         await _challengesContext.SaveChangesAsync();
 
-        // Todo: Create endpoint to get _one_ challenge
         return CreatedAtAction("Get", new {id = challenge.ChallengeId}, challenge);
     }
 
-    [HttpDelete]
+    [HttpDelete("{challengeId:int}")]
     [Authorize("DeleteChallenge")]
     public async Task<ActionResult> Delete(int challengeId)
     {

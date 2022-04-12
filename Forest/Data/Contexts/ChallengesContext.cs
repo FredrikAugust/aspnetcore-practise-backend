@@ -7,6 +7,8 @@ public class ChallengesContext : DbContext
 {
     public DbSet<Challenge> Challenges { get; set; } = null!;
     public DbSet<ChallengeAttachment> ChallengeAttachments { get; set; } = null!;
+    public DbSet<Answer> Answers { get; set; } = null!;
+    public DbSet<Solve> Solves { get; set; } = null!;
     
     private string DbPath { get; }
 
