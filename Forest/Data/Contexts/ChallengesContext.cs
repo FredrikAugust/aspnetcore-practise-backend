@@ -6,6 +6,7 @@ namespace Forest.Data.Contexts;
 public class ChallengesContext : DbContext
 {
     public DbSet<Challenge> Challenges { get; set; } = null!;
+    public DbSet<ChallengeAttachment> ChallengeAttachments { get; set; } = null!;
     
     private string DbPath { get; }
 

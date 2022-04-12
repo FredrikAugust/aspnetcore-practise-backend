@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Forest.Data.Contexts;
 using Forest.Data.Seeding;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,10 +19,25 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("CreateChallenge", policyBuilder => policyBuilder.RequireClaim("permissions", "create:challenge"));
+    options.AddPolicy("CreateChallenge",
+        policyBuilder => policyBuilder.RequireClaim("permissions", "create:challenge"));
+    options.AddPolicy("DeleteChallenge",
+        policyBuilder => policyBuilder.RequireClaim("permissions", "delete:challenge"));
 });
 
-builder.Services.AddControllers();
+// Cors
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policyBuilder =>
+    {
+        policyBuilder.AllowAnyHeader();
+        policyBuilder.AllowAnyMethod();
+        policyBuilder.AllowAnyOrigin();
+    });
+});
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -37,13 +53,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseCors(policyBuilder =>
+else
 {
-    policyBuilder.AllowAnyHeader();
-    policyBuilder.AllowAnyMethod();
-    policyBuilder.AllowAnyOrigin();
-});
+    app.UseHttpsRedirection();
+}
+
+app.UseCors();
 
 // Seeding
 using (var scope = app.Services.CreateScope())
@@ -53,9 +68,9 @@ using (var scope = app.Services.CreateScope())
     var challengesContext = services.GetService<ChallengesContext>();
     challengesContext?.Database.EnsureCreated();
     ChallengeInitializer.Initialize(challengesContext);
+    ChallengeInitializer.InitializeAttachments(challengesContext);
 }
 
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -21,10 +21,21 @@ public class ChallengesController : ControllerBase
         _challengesContext = challengesContext;
     }
 
-    [HttpGet]
+    [HttpGet(Name = "GetAll")]
     public async Task<IEnumerable<Challenge>> Get()
     {
         return await _challengesContext.Challenges.ToListAsync();
+    }
+
+    [HttpGet("{id:int}", Name = "GetChallenge")]
+    public async Task<ActionResult<Challenge>> Get(int id)
+    {
+        var challenge = await _challengesContext.Challenges.Include(challenge1 => challenge1.Attachments)
+            .FirstOrDefaultAsync(challenge1 => challenge1.ChallengeId == id);
+
+        if (challenge == null) return NotFound();
+
+        return Ok(challenge);
     }
 
     [HttpPost]
@@ -35,6 +46,21 @@ public class ChallengesController : ControllerBase
         await _challengesContext.SaveChangesAsync();
 
         // Todo: Create endpoint to get _one_ challenge
-        return CreatedAtAction("Get", challenge);
+        return CreatedAtAction("Get", new {id = challenge.ChallengeId}, challenge);
+    }
+
+    [HttpDelete]
+    [Authorize("DeleteChallenge")]
+    public async Task<ActionResult> Delete(int challengeId)
+    {
+        var challenge = await _challengesContext.Challenges.FindAsync(challengeId);
+
+        if (challenge == null) return NotFound();
+
+        _challengesContext.Challenges.Remove(challenge);
+
+        await _challengesContext.SaveChangesAsync();
+
+        return Ok();
     }
 }

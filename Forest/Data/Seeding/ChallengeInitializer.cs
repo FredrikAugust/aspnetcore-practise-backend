@@ -32,4 +32,30 @@ public static class ChallengeInitializer
         challengesContext.Challenges.AddRange(challenges);
         challengesContext.SaveChanges();
     }
+
+    public static void InitializeAttachments(ChallengesContext? challengesContext)
+    {
+        if (challengesContext == null) return;
+
+        if (challengesContext.ChallengeAttachments.Any()) return;
+
+        var attachments = new List<ChallengeAttachment>
+        {
+            new()
+            {
+                ChallengeId = 1,
+                Name = "hint.jpg",
+                Url = "http://127.0.0.1:10000/devstoreaccount1/challenge-attachments/klyseklingen.jpg",
+            },
+            new()
+            {
+                ChallengeId = 2,
+                Name = "hint.jpg",
+                Url = "http://127.0.0.1:10000/devstoreaccount1/challenge-attachments/fredrik.jpg",
+            }
+        };
+
+        challengesContext.ChallengeAttachments.AddRange(attachments);
+        challengesContext.SaveChanges();
+    }
 }

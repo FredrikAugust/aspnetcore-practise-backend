@@ -9,4 +9,6 @@ public class Challenge
     public string Description { get; set; } = null!;
 
     public int Points { get; set; }
+
+    public List<ChallengeAttachment> Attachments { get; } = new();
 }
