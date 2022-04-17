@@ -1,8 +1,8 @@
 using Domain.Entities;
 
-namespace Domain.ViewModels;
+namespace Domain.Dto;
 
-public class ChallengeViewModel
+public class ChallengeDto
 {
     public Challenge Challenge { get; set; } = null!;
 

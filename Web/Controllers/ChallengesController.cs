@@ -1,6 +1,6 @@
 using Domain.BindingModels;
+using Domain.Dto;
 using Domain.Entities;
-using Domain.ViewModels;
 using Infrastructure.Contexts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +32,7 @@ public class ChallengesController : ControllerBaseWithSubject
         var userSolves = await _challengesContext.Solves.Where(solve => solve.Subject == Subject).ToListAsync();
         var challenges = await _challengesContext.Challenges.ToListAsync();
         
-        return Ok(challenges.Select(challenge => new ChallengeViewModel
+        return Ok(challenges.Select(challenge => new ChallengeDto
         {
             Challenge = challenge,
             Solved = userSolves.Any(solve => solve.ChallengeId == challenge.ChallengeId)
@@ -54,7 +54,7 @@ public class ChallengesController : ControllerBaseWithSubject
 
         if (solved == null)
         {
-            return Ok(new ChallengeViewModel
+            return Ok(new ChallengeDto
             {
                 Solved = false,
                 Challenge = challenge
@@ -63,7 +63,7 @@ public class ChallengesController : ControllerBaseWithSubject
 
         var answer = await _challengesContext.Answers.FirstOrDefaultAsync(answer => answer.ChallengeId == challengeId);
 
-        return Ok(new ChallengeViewModel
+        return Ok(new ChallengeDto
         {
             Solved = true,
             Challenge = challenge,

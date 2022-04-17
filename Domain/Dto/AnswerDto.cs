@@ -1,6 +1,6 @@
-namespace Domain.ViewModels;
+namespace Domain.Dto;
 
-public class AnswerViewModel
+public class AnswerDto
 {
     public enum Status
     {

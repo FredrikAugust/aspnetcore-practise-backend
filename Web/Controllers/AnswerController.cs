@@ -1,5 +1,5 @@
+using Domain.Dto;
 using Domain.Entities;
-using Domain.ViewModels;
 using Infrastructure.Contexts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,9 +31,9 @@ public class AnswerController : ControllerBaseWithSubject
         if (challenge == null) return NotFound();
 
         if (answer != challenge.Answer.Value)
-            return Ok(new AnswerViewModel
+            return Ok(new AnswerDto
             {
-                AnswerStatus = AnswerViewModel.Status.Incorrect
+                AnswerStatus = AnswerDto.Status.Incorrect
             });
 
         if (Subject == null)
@@ -58,9 +58,9 @@ public class AnswerController : ControllerBaseWithSubject
         _challengesContext.Solves.Add(solve);
         await _challengesContext.SaveChangesAsync();
 
-        return Ok(new AnswerViewModel
+        return Ok(new AnswerDto
         {
-            AnswerStatus = AnswerViewModel.Status.Correct
+            AnswerStatus = AnswerDto.Status.Correct
         });
     }
 }
