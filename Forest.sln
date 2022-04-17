@@ -1,6 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forest", "Forest\Forest.csproj", "{5A0908C9-A017-445A-AF0E-188D90E17FC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{5A0908C9-A017-445A-AF0E-188D90E17FC1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7E130F39-DDF7-4913-9AAA-F980749E11A4} = {7E130F39-DDF7-4913-9AAA-F980749E11A4}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{7E130F39-DDF7-4913-9AAA-F980749E11A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{0FA0DAFA-2D49-4D6F-8945-C0603F480899}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +19,13 @@ Global
 		{5A0908C9-A017-445A-AF0E-188D90E17FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A0908C9-A017-445A-AF0E-188D90E17FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A0908C9-A017-445A-AF0E-188D90E17FC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E130F39-DDF7-4913-9AAA-F980749E11A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E130F39-DDF7-4913-9AAA-F980749E11A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E130F39-DDF7-4913-9AAA-F980749E11A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E130F39-DDF7-4913-9AAA-F980749E11A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FA0DAFA-2D49-4D6F-8945-C0603F480899}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FA0DAFA-2D49-4D6F-8945-C0603F480899}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FA0DAFA-2D49-4D6F-8945-C0603F480899}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FA0DAFA-2D49-4D6F-8945-C0603F480899}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
